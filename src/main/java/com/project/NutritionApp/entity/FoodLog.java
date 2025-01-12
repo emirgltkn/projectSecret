@@ -3,6 +3,8 @@ package com.project.NutritionApp.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "food_logs")
 @Data
@@ -15,16 +17,18 @@ public class FoodLog {
     @Column(nullable = false)
     private String foodName; // Yiyecek Adı
 
-    private int calorie; // Kalori
+    private double calorie; // Kalori
 
-    private int protein; // Protein miktarı (gram)
+    private double protein; // Protein miktarı (gram)
 
-    private int fat; // Yağ miktarı (gram)
+    private double fat; // Yağ miktarı (gram)
 
-    private int carbohydrate; // Karbonhidrat miktarı (gram)
+    private double carbohydrate; // Karbonhidrat miktarı (gram)
+
+    private Date createDate;
 
     // Kullanıcı ile ilişkilendirme (ManyToOne ilişkisi)
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false) // Burada userId kullanıyoruz
     private User user; // Hangi kullanıcıya ait olduğu
 }
