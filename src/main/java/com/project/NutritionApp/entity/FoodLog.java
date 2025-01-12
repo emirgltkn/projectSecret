@@ -29,6 +29,6 @@ public class FoodLog {
 
     // Kullanıcı ile ilişkilendirme (ManyToOne ilişkisi)
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false) // Burada userId kullanıyoruz
-    private User user; // Hangi kullanıcıya ait olduğu
+    @JoinColumn(name = "customer_id", referencedColumnName = "customerId", nullable = false) // Burada userId kullanıyoruz
+    private Customer customer; // Hangi kullanıcıya ait olduğu
 }
