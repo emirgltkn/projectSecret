@@ -19,6 +19,9 @@ public class User {
     @Column(nullable = false)
     private String password; // Şifre
 
+    @Column(nullable = false, unique = true)
+    private String email; // Kullanıcı Adı
+
     private int age; // Yaş
 
     private double weight; // Kilo

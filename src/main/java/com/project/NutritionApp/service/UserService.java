@@ -1,6 +1,7 @@
 package com.project.NutritionApp.service;
 
 import com.project.NutritionApp.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.NutritionApp.entity.User;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 @Service
 public class UserService {
 
+    @Autowired
     UserRepository userRepository;
 
 
@@ -30,9 +32,12 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public User getOneUserByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+    public Optional<User> getUserByUserName(String username) {
+        return userRepository.findByUserName(username);
     }
 
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
 }

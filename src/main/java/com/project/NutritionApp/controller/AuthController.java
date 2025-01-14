@@ -2,6 +2,7 @@ package com.project.NutritionApp.controller;
 
 import com.project.NutritionApp.entity.User;
 import com.project.NutritionApp.request.LoginRequest;
+import com.project.NutritionApp.request.RegisterRequest;
 import com.project.NutritionApp.response.AuthResponse;
 import com.project.NutritionApp.security.JWTokenProvider;
 import com.project.NutritionApp.service.UserService;
@@ -12,10 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,31 +39,48 @@ public AuthController(AuthenticationManager authenticationManager, UserService u
     this.jwtTokenProvider = jwtTokenProvider;
     /*this.refreshTokenService = refreshTokenService;*/
 }
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
-        User user = userService.getOneUserByUserName(loginRequest.getUserName());
-        AuthResponse authResponse = new AuthResponse();
-        authResponse.setAccessToken("Bearer " + jwtToken);
-   /*     authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));*/
-        authResponse.setUserId(user.getUserId());
-        return authResponse;
+        Optional<User> user = userService.getUserByUserName(loginRequest.getUserName());
+        if (user.isPresent()) {
+            User readyUser = new User();
+            readyUser = user.get();
+            AuthResponse authResponse = new AuthResponse();
+            authResponse.setAccessToken("Bearer " + jwtToken);
+            /*     authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));*/
+            authResponse.setUserId(readyUser.getUserId());
+            return authResponse;
+        }
+        return null;
     }
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody LoginRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
         AuthResponse authResponse = new AuthResponse();
-        if(userService.getOneUserByUserName(registerRequest.getUserName()) != null) {
+        Optional<User> mayErrorControl_1 = userService.getUserByUserName(registerRequest.getUserName());
+        if (mayErrorControl_1.isPresent()) {
             authResponse.setMessage("Username already in use.");
             return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
 
+        Optional<User> mayErrorControl_2 = userService.getUserByEmail(registerRequest.getEmail());
+        if (mayErrorControl_2.isPresent()) {
+            authResponse.setMessage("Email already in use.");
+            return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        System.out.println("geldik mi");
         User user = new User();
+        user.setEmail(registerRequest.getEmail());
         user.setUserName(registerRequest.getUserName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        System.out.println(registerRequest.getEmail());
+        System.out.println(registerRequest.getUserName());
         userService.saveOneUser(user);
 
 /*

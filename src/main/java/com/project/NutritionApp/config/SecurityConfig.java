@@ -48,7 +48,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
+/*    @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
@@ -64,22 +64,24 @@ public class SecurityConfig {
         config.addAllowedMethod("PATCH");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-    }
+    }*/
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.exceptionHandling(e -> e.authenticationEntryPoint(handler))
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((request) -> request
-                        .requestMatchers("/auth/login")
-                        .permitAll()
-                        .requestMatchers("/auth/register")
-                        .permitAll()
-                        .anyRequest().authenticated()
-                ).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // CSRF korumasını devre dışı bırakıyoruz (isteğe bağlı)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(handler) // Yetkisiz erişim durumunda özel yanıt
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS) // JWT ile stateless oturum
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login", "/auth/register").permitAll() // İzin verilen uç noktalar
+                        .anyRequest().authenticated() // Diğer tüm uç noktalar için kimlik doğrulama
+                )
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // JWT doğrulama filtresi
 
-        return httpSecurity.build();
+        return http.build();
     }
 }

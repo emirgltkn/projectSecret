@@ -10,6 +10,8 @@ import com.project.NutritionApp.entity.User;
 import com.project.NutritionApp.repository.UserRepository;
 import com.project.NutritionApp.security.JWTUserDetails;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 @Service
@@ -23,8 +25,10 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username);
-        return JWTUserDetails.create(user);
+        Optional<User> user = userRepository.findByUserName(username);
+        User readyUser = new User();
+        readyUser = user.get();
+        return JWTUserDetails.create(readyUser);
     }
 
     public UserDetails loadUserById(Long id) {
