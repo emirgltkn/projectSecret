@@ -20,4 +20,10 @@ public class FoodLogService {
     public FoodLog saveFoodLog(FoodLog foodLog) {
         return foodLogRepository.save(foodLog);
     }
+
+    public String deneme() {
+        return "basarili";
+    }
 }
+
+

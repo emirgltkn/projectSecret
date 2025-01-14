@@ -19,6 +19,11 @@ public class FoodLogController {
         return foodLogService.getFoodLogsByUserId(userId); // Service'den veri alıyoruz
     }
 
+    @GetMapping("/lala")
+    public String deneme() {
+        return foodLogService.deneme(); // Service'den veri alıyoruz
+    }
+
     @PostMapping
     public FoodLog createFoodLog(@RequestBody FoodLog foodLog) {
         return foodLogService.saveFoodLog(foodLog); // Yeni FoodLog kaydını alıyoruz

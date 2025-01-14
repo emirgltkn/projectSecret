@@ -3,6 +3,7 @@ package com.project.NutritionApp.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+
 @Entity
 @Table(name = "users")
 @Data
@@ -13,14 +14,14 @@ public class User {
     private Long userId; // Kullanıcı ID'si
 
     @Column(nullable = false, unique = true)
-    private String kullaniciAdi; // Kullanıcı Adı
+    private String userName; // Kullanıcı Adı
 
     @Column(nullable = false)
-    private String sifre; // Şifre
+    private String password; // Şifre
 
-    private int yas; // Yaş
+    private int age; // Yaş
 
-    private double kilo; // Kilo
+    private double weight; // Kilo
 
-    private double boy; // Boy
+    private double height; // Boy
 }
