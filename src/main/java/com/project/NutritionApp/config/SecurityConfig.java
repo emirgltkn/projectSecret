@@ -77,7 +77,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS) // JWT ile stateless oturum
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll() // İzin verilen uç noktalar
+                        .requestMatchers("/auth/login", "/auth/register", "api/foodlogs/**").permitAll() // İzin verilen uç noktalar
                         .anyRequest().authenticated() // Diğer tüm uç noktalar için kimlik doğrulama
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // JWT doğrulama filtresi
