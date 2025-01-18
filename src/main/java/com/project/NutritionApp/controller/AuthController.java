@@ -4,6 +4,7 @@ import com.project.NutritionApp.entity.User;
 import com.project.NutritionApp.request.LoginRequest;
 import com.project.NutritionApp.request.RegisterRequest;
 import com.project.NutritionApp.response.AuthResponse;
+import com.project.NutritionApp.response.UserResponse;
 import com.project.NutritionApp.security.JWTokenProvider;
 import com.project.NutritionApp.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -41,7 +42,7 @@ public AuthController(AuthenticationManager authenticationManager, UserService u
 }
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -54,7 +55,10 @@ public AuthController(AuthenticationManager authenticationManager, UserService u
             authResponse.setAccessToken("Bearer " + jwtToken);
             /*     authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));*/
             authResponse.setUserId(readyUser.getUserId());
-            return authResponse;
+
+            System.out.println("aba");
+            System.out.println(authResponse.toString());
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }
         return null;
     }

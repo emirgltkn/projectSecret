@@ -4,6 +4,7 @@ package com.project.NutritionApp.config;
 import com.project.NutritionApp.security.JWTAuthenticationEntryPoint;
 import com.project.NutritionApp.security.JWTAuthenticationFilter;
 import com.project.NutritionApp.service.UserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +24,9 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    CustomCorsConfiguration customCorsConfiguration;
 
     private UserDetailService userDetailsService;
 
@@ -48,26 +52,27 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-/*    @Bean
+    @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
+        config.addAllowedOrigin("http://localhost:3000"); // Farklı bir domain kullanıyorsanız buna göre değiştirin
+        config.addAllowedHeader("*"); // Authorization dahil
         config.addAllowedMethod("OPTIONS");
-        config.addAllowedMethod("HEAD");
         config.addAllowedMethod("GET");
-        config.addAllowedMethod("PUT");
         config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("PATCH");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-    }*/
+    }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("configde");
         http
                 .csrf(csrf -> csrf.disable()) // CSRF korumasını devre dışı bırakıyoruz (isteğe bağlı)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -80,6 +85,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login", "/auth/register", "api/foodlogs/**").permitAll() // İzin verilen uç noktalar
                         .anyRequest().authenticated() // Diğer tüm uç noktalar için kimlik doğrulama
                 )
+                .cors(c -> c.configurationSource(customCorsConfiguration))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // JWT doğrulama filtresi
 
         return http.build();
