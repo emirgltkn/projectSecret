@@ -40,7 +40,7 @@ public class FoodLog {
     // Kullanıcı ile ilişkilendirme (ManyToOne ilişkisi)
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false) // Burada userId kullanıyoruz
-
+    @JsonIgnoreProperties({"userName", "password", "email", "age", "weight", "height"})
     private User user; // Hangi kullanıcıya ait olduğu
 
     @Version
