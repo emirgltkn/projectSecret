@@ -19,6 +19,8 @@ public class FoodLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long foodId; // FoodLog ID
 
+    private int id;
+
     @Column(nullable = false)
     private String foodName; // Yiyecek Adı
 
