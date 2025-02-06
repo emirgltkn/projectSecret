@@ -31,6 +31,13 @@ public class User {
 
     private double height; // Boy
 
+    private String gender;
+
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+
+    private String activityLevel; // Kullanıcının Aktivite Seviyesi
+    private String dietGoal; // Kullanıcının Diyet Hedefi
+    private Double targetWeight; // Kullanıcının Hedef Ağırlığı
 }

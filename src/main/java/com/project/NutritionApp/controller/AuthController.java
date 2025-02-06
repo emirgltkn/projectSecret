@@ -87,12 +87,12 @@ public AuthController(AuthenticationManager authenticationManager, UserService u
         System.out.println(registerRequest.getUserName());
         userService.saveOneUser(user);
 
-/*
+
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getUserName(), registerRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
-*/
+
 
         authResponse.setMessage("User successfully registered.");
        /* authResponse.setAccessToken("Bearer " + jwtToken);*/

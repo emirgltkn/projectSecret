@@ -1,22 +1,25 @@
-package com.project.NutritionApp.response;
+package com.project.NutritionApp.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 
 import java.time.LocalDate;
+@Getter
+@Setter
+public class UserUpdateRequest {
 
-@Data
-public class UserResponse {
 
-    private String userName;
-    private String email;
-    private int age;
-    private double weight;
 
+    private int age; // Yaş
+
+    private double weight; // Kilo
 
     private double height; // Boy
 
     private String gender;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
@@ -25,3 +28,4 @@ public class UserResponse {
     private String dietGoal; // Kullanıcının Diyet Hedefi
     private Double targetWeight; // Kullanıcının Hedef Ağırlığı
 }
+
