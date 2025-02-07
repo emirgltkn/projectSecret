@@ -12,8 +12,14 @@ import java.util.Optional;
 
 public interface FoodLogRepository extends JpaRepository<FoodLog, Long> {
 
-    @Query("SELECT f FROM FoodLog f WHERE f.user.userId = :userId AND DATE(f.createDate) = :createDate")
-    List<FoodLog> findByUser_UserIdAndCreateDate(@Param("userId") Long userId, @Param("createDate") LocalDate createDate);
+    @Query("SELECT f FROM FoodLog f WHERE f.user.userId = :userId AND DATE(f.createDate) BETWEEN :startDate AND :endDate")
+    List<FoodLog> findByUserIdAndDateRange(
+            @Param("userId") Long userId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+
 
     List<FoodLog> findByUser_UserId(Long userId);
     void deleteById(Long foodId); // Bu metod JpaRepository tarafından otomatik sağlanır

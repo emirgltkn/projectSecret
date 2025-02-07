@@ -4,6 +4,7 @@ import com.project.NutritionApp.dto.FoodLogDto;
 import com.project.NutritionApp.entity.FoodLog;
 import com.project.NutritionApp.entity.User;
 import com.project.NutritionApp.request.CreateFoodLogRequest;
+import com.project.NutritionApp.request.GetFoodRequest;
 import com.project.NutritionApp.service.FoodLogService;
 import com.project.NutritionApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +34,25 @@ public class FoodLogController {
     /**
      * Kullanıcının belirli bir tarihte yediği yemekleri getirir.
      */
-    @GetMapping
+    @PostMapping("/get")
     public ResponseEntity<List<FoodLog>> getFoodLogsByDate(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate createDate) {
+            @RequestBody GetFoodRequest request) {
 
         Optional<User> user = userService.getUserByUserName(userDetails.getUsername());
 
         if (user.isPresent()) {
-            List<FoodLog> foodLogs = foodLogService.getFoodLogsByUserIdAndDate(user.get().getUserId(), createDate);
+            List<FoodLog> foodLogs = foodLogService.getFoodLogsByUserIdAndDateRange(
+                    user.get().getUserId(),
+                    request.getCreateDate(),
+                    request.getEndDate()
+            );
             return ResponseEntity.ok(foodLogs);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+
 
     /**
      * Kullanıcının yediği yeni bir yemeği kaydeder.

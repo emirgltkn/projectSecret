@@ -16,9 +16,10 @@ public class FoodLogService {
     @Autowired
     private FoodLogRepository foodLogRepository;
 
-    public List<FoodLog> getFoodLogsByUserIdAndDate(Long userId, LocalDate createDate) {
-        return foodLogRepository.findByUser_UserIdAndCreateDate(userId, createDate);
+    public List<FoodLog> getFoodLogsByUserIdAndDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
+        return foodLogRepository.findByUserIdAndDateRange(userId, startDate, endDate);
     }
+
 
     public List<FoodLog> getFoodLogsByUserId(Long userId) {
         return foodLogRepository.findByUser_UserId(userId);
