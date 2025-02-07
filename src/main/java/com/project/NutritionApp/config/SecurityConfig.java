@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,7 +53,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
+  /*  @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
@@ -67,22 +68,20 @@ public class SecurityConfig {
         config.addAllowedMethod("PATCH");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-    }
+    }*/
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("configde");
         http
-                .csrf(csrf -> csrf.disable()) // CSRF korumasını devre dışı bırakıyoruz (isteğe bağlı)
+                .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırakıyoruz (isteğe bağlı)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(handler) // Yetkisiz erişim durumunda özel yanıt
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS) // JWT ile stateless oturum
-                )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "api/foodlogs/**").permitAll() // İzin verilen uç noktalar
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT ile stateless oturum
+                ).authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login", "/auth/register", "/api/foodlogs/**").permitAll() // İzin verilen uç noktalar
                         .anyRequest().authenticated() // Diğer tüm uç noktalar için kimlik doğrulama
                 )
                 .cors(c -> c.configurationSource(customCorsConfiguration))

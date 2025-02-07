@@ -85,20 +85,24 @@ public AuthController(AuthenticationManager authenticationManager, UserService u
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         System.out.println(registerRequest.getEmail());
         System.out.println(registerRequest.getUserName());
-        userService.saveOneUser(user);
-
-
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getUserName(), registerRequest.getPassword());
+       User savedUser = userService.saveOneUser(user);
+        System.out.println("sıkıntı burda mı");
+        System.out.println(savedUser.getUserId() + registerRequest.getPassword());
+        System.out.println("sıkıntı burda mı");
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(savedUser.getUserName(), registerRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
 
+        System.out.println("sıkıntı burdaymıs");
 
+        System.out.println(jwtToken);
+        System.out.println("sıkıntı burdaymıs");
         authResponse.setMessage("User successfully registered.");
-       /* authResponse.setAccessToken("Bearer " + jwtToken);*/
+        authResponse.setAccessToken("Bearer " + jwtToken);
     /*    authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));*/
-        authResponse.setUserId(user.getUserId());
-        return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
+        authResponse.setUserId(savedUser.getUserId());
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
 

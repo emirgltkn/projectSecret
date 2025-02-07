@@ -59,11 +59,12 @@ public class UserController {
 
     }
 
-    @PutMapping("/update")
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/update")
     public ResponseEntity<?> updateUserProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody UserUpdateRequest updateRequest) {
-
+System.out.println("update e girdik mi başarı");
         Optional<User> optionalUser = userService.getUserByUserName(userDetails.getUsername());
 
         if (optionalUser.isPresent()) {
@@ -96,7 +97,7 @@ public class UserController {
             }
 
             userService.saveOneUser(user); // Güncellenmiş User nesnesini kaydet
-
+            System.out.println("buraya mı lan");
             return new ResponseEntity<>("User updated successfully!", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
