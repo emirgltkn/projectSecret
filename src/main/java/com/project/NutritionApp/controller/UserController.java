@@ -51,6 +51,7 @@ public class UserController {
             userResponseObject.setDietGoal(readyUser.getDietGoal());
             userResponseObject.setTargetWeight(readyUser.getTargetWeight());
             userResponseObject.setBirthDate(readyUser.getBirthDate());
+            userResponseObject.setBio(readyUser.getBio());
              return new ResponseEntity<>(userResponseObject, HttpStatus.OK);
         }
         else {
@@ -95,6 +96,9 @@ System.out.println("update e girdik mi başarı");
             }
             if (updateRequest.getTargetWeight() != null) {
                 user.setTargetWeight(updateRequest.getTargetWeight());
+            }
+            if (updateRequest.getBio() != null) {
+                user.setBio(updateRequest.getBio());
             }
 
             userService.saveOneUser(user); // Güncellenmiş User nesnesini kaydet

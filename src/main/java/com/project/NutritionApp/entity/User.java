@@ -33,6 +33,9 @@ public class User {
 
     private String gender;
 
+    @Lob
+    @Column(columnDefinition = "TEXT") // TEXT (64 KB) kullanılır
+    private String bio;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;

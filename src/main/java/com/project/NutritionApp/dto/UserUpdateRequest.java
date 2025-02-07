@@ -27,5 +27,6 @@ public class UserUpdateRequest {
     private String activityLevel; // Kullanıcının Aktivite Seviyesi
     private String dietGoal; // Kullanıcının Diyet Hedefi
     private Double targetWeight; // Kullanıcının Hedef Ağırlığı
+    private String bio;
 }
 
