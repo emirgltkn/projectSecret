@@ -42,7 +42,7 @@ public class UserController {
             readyUser = user.get();
             UserResponse userResponseObject = new UserResponse();
             userResponseObject.setUserName(readyUser.getUserName());
-            userResponseObject.setAge(readyUser.getAge());
+
             userResponseObject.setEmail(readyUser.getEmail());
             userResponseObject.setWeight(readyUser.getWeight());
             userResponseObject.setHeight(readyUser.getHeight());
@@ -50,6 +50,7 @@ public class UserController {
             userResponseObject.setActivityLevel(readyUser.getActivityLevel());
             userResponseObject.setDietGoal(readyUser.getDietGoal());
             userResponseObject.setTargetWeight(readyUser.getTargetWeight());
+            userResponseObject.setBirthDate(readyUser.getBirthDate());
              return new ResponseEntity<>(userResponseObject, HttpStatus.OK);
         }
         else {

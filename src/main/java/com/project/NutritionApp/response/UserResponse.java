@@ -2,6 +2,8 @@ package com.project.NutritionApp.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import java.time.LocalDate;
+import java.time.Period;
 
 import java.time.LocalDate;
 
@@ -10,7 +12,10 @@ public class UserResponse {
 
     private String userName;
     private String email;
-    private int age;
+
+    public int getAge() {
+        return (birthDate != null) ? Period.between(birthDate, LocalDate.now()).getYears() : 0;
+    }
     private double weight;
 
 
