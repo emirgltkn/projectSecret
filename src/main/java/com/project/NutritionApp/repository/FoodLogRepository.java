@@ -21,4 +21,5 @@ public interface FoodLogRepository extends JpaRepository<FoodLog, Long> {
     @Query("SELECT f FROM FoodLog f WHERE f.foodId = :foodId AND f.user.userId = :userId")
     Optional<FoodLog> findByUserAndFoodId(@Param("userId") Long userId, @Param("foodId") Long foodId);
 
+
 }

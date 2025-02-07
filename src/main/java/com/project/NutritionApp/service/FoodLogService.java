@@ -25,8 +25,8 @@ public class FoodLogService {
     }
 
 
-    public FoodLog saveFoodLog(FoodLog foodLog) {
-        return foodLogRepository.save(foodLog);
+    public List<FoodLog> saveFoodLogs(List<FoodLog> foodLogs) {
+        return foodLogRepository.saveAll(foodLogs);
     }
 
     public void deleteFoodLog(Long userId, Long foodId) {
@@ -46,7 +46,7 @@ public class FoodLogService {
         return foodLogRepository.findById(foodId);
     }
 
-    public FoodLog updateFoodLog(Long userId, Long foodId, FoodLog updatedFoodLog) {
+ /*   public FoodLog updateFoodLog(Long userId, Long foodId, FoodLog updatedFoodLog) {
         // Belirli bir kullanıcıya ait belirli bir yemek kaydını bul
         FoodLog existingFoodLog = foodLogRepository.findByUserAndFoodId(userId,foodId)
                 .orElseThrow(() -> new RuntimeException("FoodLog not found"));
@@ -66,7 +66,7 @@ public class FoodLogService {
 
         // Veritabanında kaydet
         return foodLogRepository.save(existingFoodLog);
-    }
+    }*/
 
 
 

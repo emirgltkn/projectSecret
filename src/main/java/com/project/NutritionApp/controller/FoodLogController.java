@@ -1,7 +1,9 @@
 package com.project.NutritionApp.controller;
 
+import com.project.NutritionApp.dto.FoodLogDto;
 import com.project.NutritionApp.entity.FoodLog;
 import com.project.NutritionApp.entity.User;
+import com.project.NutritionApp.request.CreateFoodLogRequest;
 import com.project.NutritionApp.service.FoodLogService;
 import com.project.NutritionApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,24 +50,45 @@ public class FoodLogController {
     /**
      * Kullanıcının yediği yeni bir yemeği kaydeder.
      */
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping
-    public ResponseEntity<FoodLog> createFoodLog(
+    public ResponseEntity<?> createFoodLog(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody FoodLog foodLog) {
+            @RequestBody CreateFoodLogRequest request) {
 
+        System.out.println("buraya girdik mi önemli");
+        System.out.println(request.getDate());
+        System.out.println(request.getMeal());
         Optional<User> user = userService.getUserByUserName(userDetails.getUsername());
-
         if (user.isPresent()) {
-            foodLog.setUser(user.get());
-            FoodLog savedFoodLog = foodLogService.saveFoodLog(foodLog);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedFoodLog);
+
+            List<FoodLog> list = new ArrayList<>();
+
+            for ( FoodLogDto obj : request.getMeal()) {
+                FoodLog foodlog = new FoodLog();
+                foodlog.setUser(user.get());
+                foodlog.setCarbs(obj.getCarbs());
+                foodlog.setProtein(obj.getProtein());
+                foodlog.setTitle(obj.getTitle());
+                foodlog.setFat(obj.getFat());
+                foodlog.setCalories(obj.getCalories());
+                foodlog.setCreateDate(request.getDate());
+                foodlog.setGrams(obj.getGrams());
+                list.add(foodlog);
+            }
+
+
+           foodLogService.saveFoodLogs(list);
+            return new ResponseEntity<>("Foodlogs created!", HttpStatus.OK);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return new ResponseEntity<>("Foodlogs NOT CREATED!", HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Kullanıcının bir yemeği güncellemesini sağlar.
      */
+/*
     @PutMapping("/{foodId}")
     public ResponseEntity<FoodLog> updateFoodLog(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -79,6 +103,7 @@ public class FoodLogController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+*/
 
     /**
      * Kullanıcının bir yemeği silmesini sağlar.
