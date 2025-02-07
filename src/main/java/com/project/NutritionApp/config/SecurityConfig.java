@@ -68,7 +68,7 @@ public class SecurityConfig {
         config.addAllowedMethod("PATCH");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-    }*/
+    } OPTİONAL CORS CONFIG */
 
 
     @Bean

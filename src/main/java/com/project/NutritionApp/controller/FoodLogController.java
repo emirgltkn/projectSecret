@@ -64,9 +64,6 @@ public class FoodLogController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody CreateFoodLogRequest request) {
 
-        System.out.println("buraya girdik mi önemli");
-        System.out.println(request.getDate());
-        System.out.println(request.getMeal());
         Optional<User> user = userService.getUserByUserName(userDetails.getUsername());
         if (user.isPresent()) {
 

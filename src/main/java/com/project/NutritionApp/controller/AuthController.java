@@ -53,11 +53,8 @@ public AuthController(AuthenticationManager authenticationManager, UserService u
             readyUser = user.get();
             AuthResponse authResponse = new AuthResponse();
             authResponse.setAccessToken("Bearer " + jwtToken);
-            /*     authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));*/
             authResponse.setUserId(readyUser.getUserId());
 
-            System.out.println("aba");
-            System.out.println(authResponse.toString());
             return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }
         return null;
@@ -78,26 +75,16 @@ public AuthController(AuthenticationManager authenticationManager, UserService u
             return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println("geldik mi");
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setUserName(registerRequest.getUserName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        System.out.println(registerRequest.getEmail());
-        System.out.println(registerRequest.getUserName());
        User savedUser = userService.saveOneUser(user);
-        System.out.println("sıkıntı burda mı");
-        System.out.println(savedUser.getUserId() + registerRequest.getPassword());
-        System.out.println("sıkıntı burda mı");
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(savedUser.getUserName(), registerRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
 
-        System.out.println("sıkıntı burdaymıs");
-
-        System.out.println(jwtToken);
-        System.out.println("sıkıntı burdaymıs");
         authResponse.setMessage("User successfully registered.");
         authResponse.setAccessToken("Bearer " + jwtToken);
     /*    authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));*/

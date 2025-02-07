@@ -33,9 +33,6 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<UserResponse> getUserProfile(@AuthenticationPrincipal UserDetails userDetails) throws Exception {
         User readyUser = new User();
-        System.out.println("burda");
-        System.out.println(userDetails.getUsername());
-        System.out.println("noluyo");
         Optional<User> user = userService.getUserByUserName(userDetails.getUsername());
         if (user.isPresent()) {
 
@@ -66,7 +63,6 @@ public class UserController {
     public ResponseEntity<?> updateUserProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody UserUpdateRequest updateRequest) {
-System.out.println("update e girdik mi başarı");
         Optional<User> optionalUser = userService.getUserByUserName(userDetails.getUsername());
 
         if (optionalUser.isPresent()) {
@@ -102,7 +98,6 @@ System.out.println("update e girdik mi başarı");
             }
 
             userService.saveOneUser(user); // Güncellenmiş User nesnesini kaydet
-            System.out.println("buraya mı lan");
             return new ResponseEntity<>("User updated successfully!", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);

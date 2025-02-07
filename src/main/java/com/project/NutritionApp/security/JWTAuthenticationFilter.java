@@ -29,16 +29,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            System.out.println("filterda uathentication");
             String jwtToken = extractJwtFromRequest(request);
-            System.out.println("filterda jwttoken bu");
-            System.out.println(jwtToken);
-            System.out.println("filterda jwttoken üstteki");
             if (StringUtils.hasText(jwtToken) && jwtTokenProvider.validateToken(jwtToken)) {
                 Long id = jwtTokenProvider.getUserIdFromJwt(jwtToken);
-                System.out.println("Userı bulabildin mi jwt heee");
                 UserDetails user = userDetailsService.loadUserById(id);
-                System.out.println("Userı bulabildin mi jwt heee helal");
                 if (user != null) {
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -47,7 +41,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            System.out.println("filterda exception");
             return;
         }
         filterChain.doFilter(request, response);
