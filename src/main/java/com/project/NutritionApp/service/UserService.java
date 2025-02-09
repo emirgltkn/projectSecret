@@ -12,9 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 @Service
 public class UserService {
 
-    @Autowired
-    UserRepository userRepository;
-
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -39,5 +37,4 @@ public class UserService {
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
 }
