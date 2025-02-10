@@ -15,13 +15,13 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public Post createPost(Long userId, String text, String imageUrl) {
+    public Post createPost(Long userId, String content, String image) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Post post = new Post();
         post.setUser(user);
-        post.setText(text);
-        post.setImageUrl(imageUrl);
+        post.setText(content);
+        post.setImageUrl(image);
         return postRepository.save(post);
     }
     public Post savePost(Post post) {

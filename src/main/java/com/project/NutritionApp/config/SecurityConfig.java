@@ -73,6 +73,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırakıyoruz (isteğe bağlı)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -81,7 +83,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT ile stateless oturum
                 ).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll() // İzin verilen uç noktalar
+                        .requestMatchers("/auth/login", "/auth/register","/*.jpg","/uploads/**").permitAll() // İzin verilen uç noktalar
                         .anyRequest().authenticated() // Diğer tüm uç noktalar için kimlik doğrulama
                 )
                 .cors(c -> c.configurationSource(customCorsConfiguration))

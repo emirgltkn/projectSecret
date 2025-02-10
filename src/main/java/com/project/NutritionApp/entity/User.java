@@ -33,6 +33,8 @@ public class User {
 
     private String gender;
 
+    private String profilePhoto;
+
     @Lob
     @Column(columnDefinition = "TEXT") // TEXT (64 KB) kullanılır
     private String bio;

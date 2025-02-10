@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostRequest {
-    private Long userId;
     private String text;
     private String imageUrl;
 }
